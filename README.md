@@ -21,7 +21,8 @@ Note: Store your bot's token (obtained via Twitch's App Management) in a .twitch
 # Commands
 The example implementation includes a few basic commands, such as:
 
-!start - will sending random emoji character in interval to the Twitch Chat
+!startemojitimer - Start Random Emoji Timer!
+!stopemojitimer - Stop Random Emoji Timer!
 
 # To-Do
 
