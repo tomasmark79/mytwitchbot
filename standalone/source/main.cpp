@@ -20,6 +20,41 @@
 #include <thread>
 #include <unordered_map>
 
+#define EMOJI_INTERVAL_SEC (int)30
+
+std::atomic<bool> stopTimerThread(false);
+
+Emoji /*💋*/ emojiWrapper;
+
+std::string &getRandomEmoji(std::string &randomEmoji)
+{
+    int a = rand() % 5;
+
+    switch (a)
+    {
+    case 0:
+        randomEmoji = emojiWrapper.getRandomEmojiFromGroup("Smileys & Emotion");
+        break;
+    case 1:
+        randomEmoji = emojiWrapper.getRandomEmojiFromGroup("Animals & Nature");
+        break;
+    case 2:
+        randomEmoji = emojiWrapper.getRandomEmojiFromGroup("Food & Drink");
+        break;
+    case 3:
+        randomEmoji = emojiWrapper.getRandomEmojiFromGroup("Activities");
+        break;
+    case 4:
+        randomEmoji = emojiWrapper.getRandomEmojiFromGroup("Travel & Places");
+        break;
+    default:
+        randomEmoji = emojiWrapper.getRandomEmojiFromGroup("Objects");
+        break;
+    }
+
+    return randomEmoji;
+}
+
 auto main(int argc, char **argv) -> int
 {
     const std::unordered_map<std::string, greeter::LanguageCode> languages{
@@ -67,10 +102,6 @@ auto main(int argc, char **argv) -> int
     greeter::Greeter greeter(name);
     std::cout << greeter.greet(langIt->second) << std::endl;
 
-    // my emoji support
-    Emoji /*💋*/ emojiWrapper;
-
-    std::atomic<bool> stopTimerThread(false);
     srand(time(NULL));
 
     CommandSet mCommands;
@@ -529,7 +560,7 @@ auto main(int argc, char **argv) -> int
     };
 
     mCommands.registerCommand(
-        {"!start", "start thread with random unicode emoji every 60 seconds",
+        {"!startemojitimer", "Start Random Emoji Timer!",
          [&](const std::string &user, const std::string &channel,
              const std::vector<std::string> &params) -> void
          {
@@ -539,42 +570,19 @@ auto main(int argc, char **argv) -> int
                  {
                      while (!stopTimerThread.load())
                      {
-                         std::cout << "tik-tak" << std::endl;
+                         std::cout << "startemojitimer" << std::endl;
                          int a = rand() % 5;
-                         std::string group;
                          std::string randomEmoji;
-                         switch (a)
-                         {
-                         case 0:
-                             group = "Smileys & Emotion";
-                             break;
-                         case 1:
-                             group = "People & Body";
-                             break;
-                         case 2:
-                             group = "Animals & Nature";
-                             break;
-                         case 3:
-                             group = "Food & Drink";
-                             break;
-                         case 4:
-                             group = "Travel & Places";
-                             break;
-                         default:
-                             group = "Objects";
-                             break;
-                         }
-
-                         randomEmoji = emojiWrapper.getRandomEmojiFromGroup(group);
+                         getRandomEmoji(randomEmoji);
                          Message msg("PRIVMSG #digitalspacedotname : " + randomEmoji + "\r\n");
                          msg.send(commandParser, transceiver);
-                         std::this_thread::sleep_for(std::chrono::seconds(60));
+                         std::this_thread::sleep_for(std::chrono::seconds(EMOJI_INTERVAL_SEC));
                      }
                  });
              threadTimer.detach();
          }});
 
-    mCommands.registerCommand({"!stop", "stop thread with random unicode emoji",
+    mCommands.registerCommand({"!stopemojitimer", "Stop Random Emoji Timer!",
                                [&](const std::string &user, const std::string &channel,
                                    const std::vector<std::string> &params) -> void
                                { stopTimerThread.store(true); }});
