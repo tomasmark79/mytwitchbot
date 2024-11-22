@@ -290,6 +290,7 @@ auto main(int argc, char **argv) -> int
 
             cout << "State='" << state << "' Prefix='" << prefix << "' Command='" << command
                  << "' Params=['" << join(params, "', '") << "']" << endl;
+
             if (command == "PING")
             {
                 Message msg("PONG " + join(params, " ") + "\r\n");
@@ -340,6 +341,7 @@ auto main(int argc, char **argv) -> int
             }
         }
     };
+
     auto transceiverLambda = [commandParser, transceiver, pointAdder, apiAddress](void) -> void
     {
         Socket twitchConnection;
@@ -561,17 +563,16 @@ auto main(int argc, char **argv) -> int
 
     mCommands.registerCommand(
         {"!startemojitimer", "Start Random Emoji Timer!",
-         [&](const std::string &user, const std::string &channel,
+         [&commandParser, &transceiver](const std::string &user, const std::string &channel,
              const std::vector<std::string> &params) -> void
          {
              stopTimerThread.store(false);
              std::thread threadTimer(
-                 [&]() -> void
+                 [&commandParser, &transceiver]() -> void
                  {
                      while (!stopTimerThread.load())
                      {
                          std::cout << "startemojitimer" << std::endl;
-                         int a = rand() % 5;
                          std::string randomEmoji;
                          getRandomEmoji(randomEmoji);
                          Message msg("PRIVMSG #digitalspacedotname : " + randomEmoji + "\r\n");
