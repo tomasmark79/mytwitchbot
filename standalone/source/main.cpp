@@ -13,7 +13,7 @@
 #include <greeter/greeter.h>
 #include <iostream>
 #include <list>
-#include <mytwitchbot/version.h>
+#include <greeter/version.h>
 #include <nlohmann/json.hpp>
 #include <set>
 #include <string>
@@ -88,7 +88,7 @@ auto main(int argc, char **argv) -> int
 
     if (result["version"].as<bool>())
     {
-        std::cout << "Greeter, version " << MYTWITCHBOT_VERSION << std::endl;
+        std::cout << "Greeter, version " << GREETER_VERSION << std::endl;
         return 0;
     }
 
