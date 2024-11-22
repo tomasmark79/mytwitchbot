@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.14...3.22)
 
 # Note: update this to your new project's name and version
 project(
-  MyTwitchBot
+  Greeter
   VERSION 1.0
   LANGUAGES CXX
 )
@@ -55,6 +55,35 @@ OPTIONS "EMOJI_INSTALL YES" # create an installable target
 # automatically. Keep that in mind when changing files, or explicitly mention them here.
 file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
+
+# set(headers
+#   include/Core/Command.h
+#   include/Core/CommandSet.h
+#   include/Core/ScopeExit.h
+#   include/Core/Throttler.h
+#   include/Core/utils.h
+#   include/greeter/greeter.h
+#   include/Inet/InetSocket.h
+#   include/Threading/Address.h
+#   include/Threading/Message.h
+#   include/Threading/PostOffice.h
+#   include/Threading/RAIIMutex.h
+# )
+
+# set(sources
+# source/greeter.cpp
+# source/Core/Command.cpp
+# source/Core/CommandSet.cpp
+# source/Core/ScopeExit.cpp
+# source/Core/Throttler.cpp
+# source/Core/utils.cpp
+# source/Inet/InetSocket.cpp
+# source/Threading/Address.cpp
+# source/Threading/Message.cpp
+# source/Threading/PostOffice.cpp
+# source/Threading/RAIIMutex.cpp
+# )
+
 
 # ---- Create library ----
 
